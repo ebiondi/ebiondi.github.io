@@ -1,0 +1,72 @@
+[
+  {
+    "objectID": "projects/index.html",
+    "href": "projects/index.html",
+    "title": "Projects",
+    "section": "",
+    "text": "My work in the Bourbeau lab is focused on sexual dysfunction, a common outcome from spinal cord injury (SCI) which heavily impacts quality of life. While sexual dysfunction is common in SCI, it is often overlooked as a research priority, especially in women. Most current sexual health therapies focus on male arousal or female reproductive health. Other aspects of female sexual health, such as arousal, are overlooked. Sacral neuromodulation (SNM) has been annecdotally reported to improve sexual function, especially with chronic use. We are interested in the use of SNM for restoration of arousal in women with SCI."
+  },
+  {
+    "objectID": "projects/index.html#sacral-nerve-stimulation",
+    "href": "projects/index.html#sacral-nerve-stimulation",
+    "title": "Projects",
+    "section": "",
+    "text": "My work in the Bourbeau lab is focused on sexual dysfunction, a common outcome from spinal cord injury (SCI) which heavily impacts quality of life. While sexual dysfunction is common in SCI, it is often overlooked as a research priority, especially in women. Most current sexual health therapies focus on male arousal or female reproductive health. Other aspects of female sexual health, such as arousal, are overlooked. Sacral neuromodulation (SNM) has been annecdotally reported to improve sexual function, especially with chronic use. We are interested in the use of SNM for restoration of arousal in women with SCI."
+  },
+  {
+    "objectID": "projects/index.html#sexual-dysfunction",
+    "href": "projects/index.html#sexual-dysfunction",
+    "title": "Projects",
+    "section": "Sexual Dysfunction",
+    "text": "Sexual Dysfunction\nI am generally interested in sexual dysfunction, with particular interest in genito-pelvic pain and penetration disorders. Below is my presentation given at the 2022 Ohio Academy of Nurse Midwives Forward."
+  },
+  {
+    "objectID": "Education/index.html",
+    "href": "Education/index.html",
+    "title": "Education",
+    "section": "",
+    "text": "University of Virginia: Bachelor of Science in Engineering 2013-2017"
+  },
+  {
+    "objectID": "Education/index.html#section",
+    "href": "Education/index.html#section",
+    "title": "Education",
+    "section": "",
+    "text": "Case Western Reserve University: Master of Nursing 2019-2021\nCase Western Reserve University: Master of Science in Nursing 2021-2023\nCase Western Reserve University: PhD in Biomedical Engineering 2026- Current\n\n:::"
+  },
+  {
+    "objectID": "Dashboard/index.html",
+    "href": "Dashboard/index.html",
+    "title": "Dashboard",
+    "section": "",
+    "text": "Coming soon"
+  },
+  {
+    "objectID": "Blog/index.html",
+    "href": "Blog/index.html",
+    "title": "Blog",
+    "section": "",
+    "text": "Coming soon"
+  },
+  {
+    "objectID": "cv/index.html",
+    "href": "cv/index.html",
+    "title": "Curriculum vitae",
+    "section": "",
+    "text": "Download current CV\n  \n\n\n  \n\n\nView the tutorial for this template (+ download link)"
+  },
+  {
+    "objectID": "Dashboard 1/Practice.html",
+    "href": "Dashboard 1/Practice.html",
+    "title": "Reproductive Health Dashboard",
+    "section": "",
+    "text": "library(nhanesA)\nlibrary(tidyverse)\nlibrary(readxl)\nlibrary(scales)\nlibrary(DT)\nlibrary(gt)\nlibrary(haven)\ntheme_set(theme_minimal(base_size = 24, base_family = \"sans\"))\n\n\nlibrary(nhanesA)\nlibrary(writexl)\nlibrary(tidyverse)\n\ndir.create(\"data\", showWarnings = FALSE)\n\n#pull in data from from NHANES and save it\n\n#DEMO \n\ndemo_raw &lt;- nhanes('P_DEMO') |&gt; tibble()\n\nsaveRDS(demo_raw, \"data/P_DEMO.Rds\")\n\n#BMI \nbmi_raw &lt;- nhanes('P_BMX') |&gt; tibble()\n\nsaveRDS(bmi_raw, \"data/P_BMX .Rds\")\n\n#Fertility lavs \namh_raw &lt;- nhanes('P_TST') |&gt; tibble()\n\nsaveRDS(amh_raw, \"data/P_TST.Rds\")\n\n#REGULAR MENSES \nmenses_raw &lt;- nhanes('P_RHQ') |&gt; tibble()\n\nsaveRDS(menses_raw, \"data/P_RHQ.Rds\")\n\n# Now that data are saved, I can just read in the tibble\n\ndemo_raw &lt;- readRDS(\"data/P_DEMO.Rds\")\nbmi_raw &lt;- readRDS(\"data/P_BMX .Rds\")\namh_raw &lt;- readRDS(\"data/P_TST.Rds\")\nmenses_raw &lt;- readRDS(\"data/P_RHQ.Rds\")\n\ndemo_reduced &lt;- demo_raw |&gt;\n  select(SEQN,RIAGENDR, RIDAGEYR, RIDSTATR) \nbmi_reduced &lt;- bmi_raw |&gt;\n  select(SEQN,BMXBMI) \namh_reduced&lt;- amh_raw |&gt;\n  select(SEQN,LBX17H, LBXAMH, LBXEST,LBXFSH, LBXLUH, LBXPG4) \nmenses_reduced &lt;- menses_raw |&gt;\n  select(SEQN,RHQ031,RHQ074, RHQ076) \n\n\nNEW &lt;- left_join(demo_reduced, bmi_reduced, by = \"SEQN\")\nNEW2 &lt;- left_join(NEW, amh_reduced, by = \"SEQN\")\nNEW3 &lt;- left_join(NEW2, menses_reduced, by = \"SEQN\")\n\nwrite_xlsx(NEW3, \"Project_B.xlsx\")\n\n#Clean the data \nClean_data &lt;- read_excel(\"Project_B.xlsx\")\n\n#Select only female \nClean_data &lt;- Clean_data |&gt;\n  filter(RIAGENDR == \"Female\")\n\n#Select only those interviewed and tested\nClean_data &lt;- Clean_data |&gt;\n  filter(RIDSTATR == \"Both interviewed and MEC examined\")\n\n#Select those over 18 and under 44 because per survey pregnancy related questions ended at this age\nClean_data &lt;- Clean_data |&gt;\n  filter(RIDAGEYR &gt; 18 & RIDAGEYR&lt;44)\n\n#Convert categorical variables to factors RHQ031\nClean_data$RHQ031&lt;- factor(Clean_data$RHQ031, levels = c(\"Yes\", \"No\"))\n\n#Convert categorical variables to factors RHQ074\nClean_data$RHQ074&lt;- factor(Clean_data$RHQ074, levels = c(\"Yes\", \"No\"))\n\n#Convert categorical variables to factors RHQ076\nClean_data$RHQ076&lt;- factor(Clean_data$RHQ076, levels = c(\"Yes\", \"No\"))\n\nwrite_xlsx(Clean_data, \"Clean_Data.xlsx\")\n\n# Address missing numbers \n# Keeps only completely full rows for data for study 1\nclean_data_study1 &lt;- Clean_data %&gt;% drop_na()\n\nwrite_xlsx(clean_data_study1, \"Clean_Data_Study1.xlsx\")\n\n#Analysis B (boxplot)\n\nggplot(clean_data_study1, aes(x=BMXBMI, y = RHQ031, fill = BMXBMI))+\n  geom_boxplot()+\n  labs (title = \"Average BMI Variance with Menstrual Regularity\",\n        x = \"BMI\",\n        y = \"Regular Menses\")+\n  scale_fill_manual(\n    values = c(\n      \"Regular\" = \"#F4A6B8\",\n      \"Irregular\" = \"#A6CEE3\"\n    )\n  ) +\n  theme_minimal()\n\nWarning: The following aesthetics were dropped during statistical transformation: fill.\nℹ This can happen when ggplot fails to infer the correct grouping structure in\n  the data.\nℹ Did you forget to specify a `group` aesthetic or to convert a numerical\n  variable into a factor?\n\n\nWarning: No shared levels found between `names(values)` of the manual scale and the\ndata's fill values.\n\n\n\n\n\n\n\n\n#Analysis C - Compare 3-6 means using independent samples ()\n\n#Analysis D\n\n#Analysis E\n\n# Regression \n\n# Regression\n\n# Comparison"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to my website!",
+    "section": "",
+    "text": "Github\n  \n  \n    \n     Email\n  \n\n\n\n\nWelcome to my website!\nMy name is Emily Biondi. I am a Certified Nurse Midwife (CNM) and PhD candidate in Biomedical Engineering at Case Western Reserve University. I am passionate about women’s health and research into caring for women throughout the lifespan from puberty through post-menopause.\nMy research interests include obstetrics and gynecology with a special focus on pelvic floor dysfunction. I am currently working in Dr. Dennis Bourbeau’s lab which focuses on autonomic nervous system restoration in the pelvis. I am especially interested in the use of sacral neural modulation to modulate genitourinary responses.\nI previously worked as an out-of-hospital CNM at a birth center providing full-scope midwifery care including comprehensive reproductive work-ups, family planning, and gynecologic services.\nPlease feel free to contact me with any questions at eam206@case.edu."
+  }
+]

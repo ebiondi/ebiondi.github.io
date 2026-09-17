@@ -1,0 +1,33 @@
+---
+title: Education
+---
+
+::: {layout-ncol=2}
+:::
+
+---
+
+University of Virginia: 
+Bachelor of Science in Engineering 
+2013-2017 
+
+![](University-of-Virginia-Logo.png)
+--- 
+Case Western Reserve University:
+Master of Nursing 
+2019-2021
+
+Case Western Reserve University:
+Master of Science in Nursing 
+2021-2023
+
+Case Western Reserve University:
+PhD in Biomedical Engineering
+2026- Current 
+
+
+![](CWRU.jpg)
+
+:::
+
+
